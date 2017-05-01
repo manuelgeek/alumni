@@ -8,7 +8,7 @@
 	@section('content')
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-			<h1>Create new post</h1>
+			<h1>Create new post here</h1>
 			<hr>
 			{!! Form::open(['route' => 'posts.store','data-parsley-validate'
 			=> '']) !!}
