@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Post;
 use Session;
+use App\Category;
 
 class PostController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +25,6 @@ class PostController extends Controller
     {
         //create a variable and store all the blog posts from db
         $posts = Post::orderBy('id', 'desc')->paginate(10);
-
         //return a view and pass in the above variable
         return view('posts.index')->withPosts($posts);
     }
@@ -31,7 +36,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+        return view('posts.create')->withCategories($categories);
     }
 
     /**
@@ -46,6 +52,7 @@ class PostController extends Controller
         $this->validate($request, array(
                 'title' => 'required|max:255',
                 'slug'=>'required|alpha_dash|min:5|max:255|unique:posts,slug',
+                'category_id'=>'required|integer',
                 'body' => 'required'
             ));
         //store in the database
@@ -53,6 +60,7 @@ class PostController extends Controller
 
         $post->title = $request->title;
         $post->slug = $request->slug;
+        $post->category_id = $request->category_id;
         $post->body = $request->body;
 
         $post->save();
@@ -72,7 +80,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
-        return view('posts.show')->withPost($post);
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -86,8 +94,14 @@ class PostController extends Controller
         //find the post in db and save a a var
         $post = Post::find($id);
 
+        $categories = Category::all();
+        $cats = array();
+        foreach ($categories as $category) {
+            $cats[$category->id] = $category->name;
+        }
+
         //retutn the view and pass in the var
-        return view('posts.edit')->withPost($post);
+        return view('posts.edit')->withPost($post)->withCategories($cats);
     }
 
     /**
@@ -106,12 +120,14 @@ class PostController extends Controller
        
         $this->validate($request, array(
                 'title' => 'required|max:255',
+                'category_id' => 'required|integer',
                 'body' => 'required'
             ));
         } else {
           $this->validate($request, array(
                 'title' => 'required|max:255',
                 'slug'=>'required|alpha_dash|min:5|max:255|unique:posts,slug',
+                'category_id' => 'required|integer',
                 'body' => 'required'
             ));
         }
@@ -121,6 +137,7 @@ class PostController extends Controller
 
         $post->title = $request->input('title');
         $post->slug = $request->input('slug');
+        $post->category_id = $request->input('category_id');
         $post->body = $request->input('body');
 
         $post->save();
