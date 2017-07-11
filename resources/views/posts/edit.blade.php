@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="row">	
-	{!! Form::model($post, ['route'=> ['posts.update',$post->id], 'method'=>'PUT']) !!}
+	{!! Form::model($post, ['route'=> ['posts.update',$post->id], 'method'=>'PUT','files'=>true]) !!}
 	<div class="col-md-8">
 		{{-- <h1> {{ $post->title }} </h1> --}}
 		{{ Form::label('title', 'Title:') }}
@@ -19,6 +19,9 @@
 		
 		{{ Form::label('body', 'Body:', ['class'=>'form-spacing-top']) }}
 		{{ Form::textarea('body',null, ['class'=>'form-control']) }}
+
+		{{ Form::label('featured_image','Update Image:', ['class'=>'form-spacing-top'])}} 
+		{{ Form::file('featured_image') }}
 
 		{{-- <p class="lead">{{ $post->body }}</p> --}}
 	</div>

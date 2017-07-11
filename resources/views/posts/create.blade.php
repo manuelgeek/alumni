@@ -11,7 +11,7 @@
 			<h1>Create new post here</h1>
 			<hr>
 			{!! Form::open(['route' => 'posts.store','data-parsley-validate'
-			=> '']) !!}
+			=> '','files'=>true]) !!}
 			   {{ Form::label('title','Title:')}} 
 			   {{ Form::text('title',null,array('class' => 'form-control','required'=>'' ))}}
 			   {{ Form::label('slug','Slug: ')}} 
@@ -23,6 +23,9 @@
 			   		<option value="{{ $category->id }}">{{ $category->name }}</option>
 			   	@endforeach
 			   </select>
+
+			   {{ Form::label('featured_image','Upload Image:')}} 
+			   {{ Form::file('featured_image') }}
 
 			   {{ Form::label('body','Post Body:')}} 
 			   {{ Form::textarea('body',null,array('class' => 'form-control','required'=>'' ))}}

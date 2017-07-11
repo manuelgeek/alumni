@@ -10,7 +10,7 @@ use App\Post;
 class BlogController extends Controller
 {
 	public function getIndex(){
-		$post = Post::paginate(5);
+		$post = Post::orderBy('created_at', 'desc')->paginate(5);
 		return view('blog.index')->withPosts($post);
 	}
 
