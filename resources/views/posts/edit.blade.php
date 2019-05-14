@@ -1,6 +1,12 @@
 @extends('main')
 
 @section('title', '| Edit Blog Post')
+ <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+		  <script>tinymce.init({ 
+		  	selector:'textarea',
+		  	plugins:'link code',
+		  	menubar: false
+		  	 });</script>
 
 @section('content')
 

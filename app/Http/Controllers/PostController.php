@@ -10,6 +10,7 @@ use Session;
 use App\Category;
 use Image;
 use Storage;
+use Purifier;
 
 class PostController extends Controller
 {
@@ -64,7 +65,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->slug = $request->slug;
         $post->category_id = $request->category_id;
-        $post->body = $request->body;
+        $post->body = Purifier::clean($request->body);
 
         //image upload
         if ($request->hasFile('featured_image')) {
@@ -152,7 +153,7 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->slug = $request->input('slug');
         $post->category_id = $request->input('category_id');
-        $post->body = $request->input('body');
+        $post->body = Purifier::clean($request->input('body'));
 
         if ($request->hasFile('featured_image')) {
             //add new photo
@@ -189,7 +190,7 @@ class PostController extends Controller
         //
         $post = Post::find($id);
 
-        //dele image 
+        //delete image 
         $post->tags()->detach();
         Storage::delete($post->image);
 
